@@ -1,0 +1,8 @@
+#!/bin/sh
+
+rm -rf ./recovery.img ./new-ramdisk.cpio.gz
+
+./repack_ramdisk ramdisk
+./mkbootimg --kernel ./recovery.kernel  --ramdisk ./new-ramdisk.cpio.gz --cmdline "androidboot.hardware=huawei user_debug=31 kgsl.mmutype=gpummu" --base 0x80200000 --pagesize 2048 --ramdiskaddr 0x81600000 -o recovery.img
+
+rm -rf ./new-ramdisk.cpio.gz
