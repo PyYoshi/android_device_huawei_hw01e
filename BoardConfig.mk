@@ -1,6 +1,11 @@
 # inherit from the proprietary version
 -include vendor/huawei/hw01e/BoardConfigVendor.mk
 
+# Build Env
+#TARGET_TOOLS_PREFIX := prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.7/bin/arm-linux-androideabi-
+TARGET_KERNEL_CUSTOM_TOOLCHAIN := arm-eabi-4.4.3
+TARGET_KERNEL_CUSTOM_TOOLCHAIN_SUFFIX := arm-eabi-
+
 # Include Path
 TARGET_SPECIFIC_HEADER_PATH := device/huawei/hw01e/include
 
@@ -87,7 +92,7 @@ BOARD_EGL_CFG := device/huawei/hw01e/configs/egl.cfg
 #TARGET_PROVIDES_LIBLIGHT := true
 
 # Power
-TARGET_PROVIDES_POWERHAL := true
+#TARGET_PROVIDES_POWERHAL := true
 
 # GPS
 #BOARD_HAVE_NEW_QC_GPS := true
