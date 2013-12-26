@@ -542,3 +542,64 @@ on property:persist.sys.shlog.switch=TRUE
 
 on property:persist.sys.sysrq=*
     write /proc/sys/kernel/sysrq   $persist.sys.sysrq
+
+
+
+
+
+
+
+
+service akm8963 /system/bin/akmd8963
+	disabled
+    oneshot
+
+service akm8975 /system/bin/akmd8975
+    disabled
+    oneshot
+
+service rmt_oeminfo /system/bin/rmt_oeminfo
+    class huawei
+
+service libqmi_oem_main /system/bin/libqmi_oem_main
+    class late_start
+
+service test_diag /system/bin/test_diag
+    class huawei
+
+service ftmdaemon /system/bin/ftmdaemon
+    class huawei
+
+service huawei_version /system/bin/huawei_version
+    class huawei
+    oneshot
+
+service dtvserver /system/bin/dtvserver
+    class main
+
+service dtvsdserver /system/bin/dtvsdserver
+    class main
+
+service mfescand /system/bin/mfescand
+    class main
+    socket mfescand stream 600 system system
+
+service pcuiserver /system/bin/pcuiserver
+    class huawei
+    oneshot
+
+service fs_encrypt /system/bin/fs_encrypt_daemon
+    user root
+    disabled
+
+service huawei_nv_bin /system/bin/huawei_nv_bin
+    disabled
+    oneshot
+
+service yamaha_ori /system/bin/orientationd
+	disabled
+    oneshot
+
+service yamaha_geo /system/bin/geomagneticd
+	disabled
+    oneshot
