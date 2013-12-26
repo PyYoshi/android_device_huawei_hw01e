@@ -1,0 +1,56 @@
+# Adreno
+etc/firmware/a225_pfp.fw
+etc/firmware/a225_pm4.fw
+etc/firmware/a225p5_pm4.fw
+etc/firmware/a300_pfp.fw
+etc/firmware/a300_pm4.fw
+etc/firmware/vidc.b00
+etc/firmware/vidc.b01
+etc/firmware/vidc.b02
+etc/firmware/vidc.b03
+etc/firmware/vidc.mdt
+etc/firmware/vidc_1080p.fw
+etc/firmware/vidcfw.elf
+lib/egl/eglsubAndroid.so
+lib/egl/libEGL_adreno200.so
+lib/egl/libGLESv1_CM_adreno200.so
+lib/egl/libGLESv2S3D_adreno200.so
+lib/egl/libGLESv2_adreno200.so
+lib/egl/libq3dtools_adreno200.so
+lib/libC2D2.so
+lib/libgsl.so
+lib/libllvm-a3xx.so
+lib/libOpenCL.so
+lib/libOpenVG.so
+lib/libsc-a2xx.so
+llib/ibsc-a3xx.so
+
+# Touch firmware
+etc/firmware/cyttsp_8960_cdp.hex
+
+# Sensors
+bin/akmd8963
+bin/akmd8975
+
+# Other
+bin/rmt_oeminfo
+bin/libqmi_oem_main
+bin/test_diag
+bin/ftmdaemon
+bin/huawei_version
+bin/dtvserver
+bin/dtvsdserver
+bin/mfescand
+bin/pcuiserver
+bin/fs_encrypt_daemon
+bin/huawei_nv_bin
+bin/orientationd
+bin/geomagneticd
+
+
+
+
+
+
+
+
