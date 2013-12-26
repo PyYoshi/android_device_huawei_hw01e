@@ -1,0 +1,279 @@
+# Copyright (c) 2011, Code Aurora Forum. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+#     * Neither the name of Code Aurora nor
+#       the names of its contributors may be used to endorse or promote
+#       products derived from this software without specific prior written
+#       permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+# NON-INFRINGEMENT ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+# CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+# EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+# PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+# OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+# OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+# ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+
+# DTSNO             OWNER     DATE            DESCRIPTION
+# DTS2011122207966  w62358    2011/12/26      Adjust the USB Composition and PIDs
+# DTS2012010906698  l00188955 2012/01/09      modify the pid for new usb drivers
+# DTS2012020202155  z00202508 2012/2/2        Add USB SN report function
+# DTS2012030100138  z00202508 2012/3/1        Update for unify PC driver support rmnet.
+# DTS2012022904242  z00202508 2012/3/2        Add usb mode factory mode lock function.
+# DTS2012030800779  z00202508 2012/3/20       Add HiSuite function.
+
+on init
+    write /sys/class/android_usb/android0/f_rndis/wceis 1
+
+service qcom-usb-sh /system/bin/sh /init.qcom.usb.sh
+    class core
+    user root
+    oneshot
+
+# USB compositions
+# < DTS2012010906698 l00188955 2012-01-09 begin: deleted for statements exist in init.rc
+# DTS2012010906698 l00188955 2012-01-09 end >
+# < DTS2012020202155 z00202508 2012-2-2 begin >
+
+on property:sys.usb.config=diag,serial_smd,serial_tty,rmnet_bam,mass_storage,adb
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 12D1
+    write /sys/class/android_usb/android0/idProduct 1035
+    write /sys/class/android_usb/android0/iSerial cleanup
+# < DTS2012030100138 z00202508 2012-3-1 begin >
+    write /sys/class/android_usb/android0/f_diag/clients diag,diag_mdm
+# < DTS2012030100138 z00202508 2012-3-1 end>
+    write /sys/class/android_usb/android0/f_serial/transports smd,tty
+    write /sys/class/android_usb/android0/f_rmnet/transports smd,bam
+    # /* <DTS2012030800779 z00202508 2012-3-20 start> */
+    write /sys/class/android_usb/f_mass_storage/luns sdcard
+    write /sys/class/android_usb/f_mass_storage/lun/file none
+    # /* <DTS2012030800779 z00202508 2012-3-20 end> */
+    write /sys/class/android_usb/android0/functions serial,mass_storage,adb,diag,rmnet
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state $sys.usb.config
+
+on property:sys.usb.config=diag,serial_smd,serial_tty,mass_storage,rmnet_bam,adb
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 12D1
+    write /sys/class/android_usb/android0/idProduct 1035
+    write /sys/class/android_usb/android0/iSerial $ro.serialno
+    write /sys/class/android_usb/android0/f_diag/clients diag,diag_mdm
+    write /sys/class/android_usb/android0/f_serial/transports smd,tty
+    write /sys/class/android_usb/android0/f_rmnet/transports smd,bam
+    # /* <DTS2012030800779 z00202508 2012-3-20 start> */
+    write /sys/class/android_usb/f_mass_storage/luns sdcard
+    write /sys/class/android_usb/f_mass_storage/lun/file none
+    # /* <DTS2012030800779 z00202508 2012-3-20 end> */
+    write /sys/class/android_usb/android0/functions serial,mass_storage,adb,diag,rmnet
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state $sys.usb.config
+
+# < DTS2012010906698 l00188955 2012-01-09 begin: replace the PID with 1039
+on property:sys.usb.config=rndis
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 12D1
+    write /sys/class/android_usb/android0/idProduct 1039
+    write /sys/class/android_usb/android0/iSerial $ro.serialno
+    write /sys/class/android_usb/android0/functions rndis
+    write /sys/class/android_usb/android0/enable 1
+    setprop sys.usb.state $sys.usb.config
+# DTS2012010906698 l00188955 2012-01-09 end >
+
+# < DTS2012010906698 l00188955 2012-01-09 begin: replace the PID with 1050
+on property:sys.usb.config=rndis,adb
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 12D1
+    write /sys/class/android_usb/android0/idProduct 1050
+    write /sys/class/android_usb/android0/iSerial $ro.serialno
+    write /sys/class/android_usb/android0/functions rndis,adb
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state $sys.usb.config
+# DTS2012010906698 l00188955 2012-01-09 end >
+
+# DTS2012010906698 l00188955 2012-01-09 begin: replace the PID with 1051
+on property:sys.usb.config=mtp
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 12D1
+    write /sys/class/android_usb/android0/idProduct 1051
+# ADD For FeliCa start
+    write /sys/class/android_usb/android0/bDeviceClass 0
+    write /sys/class/android_usb/android0/bDeviceSubClass 0
+    write /sys/class/android_usb/android0/bDeviceProtocol 0
+# ADD For FeliCa end
+    write /sys/class/android_usb/android0/iSerial $ro.serialno
+    write /sys/class/android_usb/android0/functions mtp
+    write /sys/class/android_usb/android0/enable 1
+    setprop sys.usb.state $sys.usb.config
+# DTS2012010906698 l00188955 2012-01-09 end >
+
+# DTS2012010906698 l00188955 2012-01-09 begin: replace the PID with 1052
+on property:sys.usb.config=mtp,adb
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 12D1 
+    write /sys/class/android_usb/android0/idProduct 1052
+    write /sys/class/android_usb/android0/iSerial $ro.serialno
+    write /sys/class/android_usb/android0/functions mtp,adb
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state $sys.usb.config
+# DTS2012010906698 l00188955 2012-01-09 end >
+
+# DTS2012010906698 l00188955 2012-01-09 begin: replace the PID with 1053
+on property:sys.usb.config=ptp
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 12D1 
+    write /sys/class/android_usb/android0/idProduct 1053
+# ADD For FeliCa start
+    write /sys/class/android_usb/android0/bDeviceClass 0
+    write /sys/class/android_usb/android0/bDeviceSubClass 0
+    write /sys/class/android_usb/android0/bDeviceProtocol 0
+# ADD For FeliCa end
+    write /sys/class/android_usb/android0/iSerial $ro.serialno
+    write /sys/class/android_usb/android0/functions ptp
+    write /sys/class/android_usb/android0/enable 1
+    setprop sys.usb.state $sys.usb.config
+# DTS2012010906698 l00188955 2012-01-09 end >
+
+#DTS2012010906698 l00188955 2012-01-09 begin: replace the PID with 1054
+on property:sys.usb.config=ptp,adb
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 12D1 
+    write /sys/class/android_usb/android0/idProduct 1054
+    write /sys/class/android_usb/android0/iSerial $ro.serialno
+    write /sys/class/android_usb/android0/functions ptp,adb
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state $sys.usb.config
+# DTS2012010906698 l00188955 2012-01-09 end >
+
+# < DTS2012010906698 l00188955 2012-01-09 begin: replace PID with 1037
+on property:sys.usb.config=mass_storage
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 12D1
+    write /sys/class/android_usb/android0/idProduct 1037
+# ADD For FeliCa start
+    write /sys/class/android_usb/android0/bDeviceClass 0
+    write /sys/class/android_usb/android0/bDeviceSubClass 0
+    write /sys/class/android_usb/android0/bDeviceProtocol 0
+# ADD For FeliCa end
+    write /sys/class/android_usb/android0/iSerial $ro.serialno
+    # /* <DTS2012030800779 z00202508 2012-3-20 start> */
+    write /sys/class/android_usb/f_mass_storage/luns sdcard
+    write /sys/class/android_usb/f_mass_storage/lun/file none
+    # /* <DTS2012030800779 z00202508 2012-3-20 end> */
+    write /sys/class/android_usb/android0/functions mass_storage
+    write /sys/class/android_usb/android0/enable 1
+    setprop sys.usb.state $sys.usb.config
+# DTS2012010906698 l00188955 2012-01-09 end >
+
+# < DTS2012010906698 l00188955 2012-01-09 begin: replace PID with 1038
+on property:sys.usb.config=mass_storage,adb
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 12D1
+    write /sys/class/android_usb/android0/idProduct 1038
+    write /sys/class/android_usb/android0/iSerial $ro.serialno
+    # /* <DTS2012030800779 z00202508 2012-3-20 start> */
+    write /sys/class/android_usb/f_mass_storage/luns sdcard
+    write /sys/class/android_usb/f_mass_storage/lun/file none
+    # /* <DTS2012030800779 z00202508 2012-3-20 end> */
+    write /sys/class/android_usb/android0/functions mass_storage,adb
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state $sys.usb.config
+# DTS2012010906698 l00188955 2012-01-09 end >
+
+# < DTS2012010906698 l00188955 2012-01-09 begin: replace PID with 1055
+on property:sys.usb.config=modem
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 12D1
+    write /sys/class/android_usb/android0/idProduct 1055
+# ADD For FeliCa start
+    write /sys/class/android_usb/android0/bDeviceClass 0
+    write /sys/class/android_usb/android0/bDeviceSubClass 0
+    write /sys/class/android_usb/android0/bDeviceProtocol 0
+# ADD For FeliCa end
+    write /sys/class/android_usb/android0/iSerial $ro.serialno
+    write /sys/class/android_usb/android0/f_serial/transports smd
+    write /sys/class/android_usb/android0/functions serial
+    write /sys/class/android_usb/android0/enable 1
+    setprop sys.usb.state $sys.usb.config
+# DTS2012010906698 l00188955 2012-01-09 end >
+
+# < DTS2012010906698 l00188955 2012-01-09 begin: replace PID with 1056
+on property:sys.usb.config=modem,adb
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 12D1
+    write /sys/class/android_usb/android0/idProduct 1056
+    write /sys/class/android_usb/android0/iSerial $ro.serialno
+    write /sys/class/android_usb/android0/f_serial/transports smd
+    write /sys/class/android_usb/android0/functions serial,adb
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state $sys.usb.config
+# DTS2012010906698 l00188955 2012-01-09 end >
+# <DTS2012020202155  z00202508 2012-2-2 end>
+
+# < DTS2012010906698 l00188955 2012-01-09 begin: added for charge-only mode
+on property:sys.usb.config=charge_only
+    write /sys/class/android_usb/android0/enable 0
+# /* <DTS2012022904242 z00202508 2012-3-2 delete begin> */
+#    write /sys/class/android_usb/android0/bDeviceClass 0
+# ADD For FeliCa start
+    write /sys/class/android_usb/android0/bDeviceSubClass 0
+    write /sys/class/android_usb/android0/bDeviceProtocol 0
+# ADD For FeliCa end
+#    write /sys/class/android_usb/android0/enable 1
+# /* <DTS2012022904242 z00202508 2012-3-2 delete end> */
+    setprop sys.usb.state $sys.usb.config
+
+on property:sys.usb.config=charge_only,adb
+    stop adbd
+    write /sys/class/android_usb/android0/enable 0
+# /* <DTS2012022904242 z00202508 2012-3-2 delete begin> */
+#    write /sys/class/android_usb/android0/bDeviceClass 0
+#    write /sys/class/android_usb/android0/enable 1
+# /* <DTS2012022904242 z00202508 2012-3-2 delete end> */
+    setprop sys.usb.state $sys.usb.config
+# DTS2012010906698 l00188955 2012-01-09 end >
+
+    # /* <DTS2012030800779 z00202508 2012-3-20 start> */
+on property:sys.usb.config=hisuite,mtp,mass_storage,adb
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 12d1
+    write /sys/class/android_usb/android0/idProduct 1052
+    write /sys/class/android_usb/android0/iSerial $ro.serialno
+    write /sys/class/android_usb/f_mass_storage/luns cdrom
+    write /sys/class/android_usb/f_mass_storage/lun/file data/cust/cdrom/autorun.iso
+    write /sys/class/android_usb/android0/functions mtp,adb,mass_storage
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state $sys.usb.config
+    # /* <DTS2012030800779 z00202508 2012-3-20 end> */
+    
+# ADD For FeliCa start
+on property:sys.usb.config=dtf
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 12D1
+    write /sys/class/android_usb/android0/idProduct 1060
+    write /sys/class/android_usb/android0/bDeviceClass 255
+    write /sys/class/android_usb/android0/bDeviceSubClass 255
+    write /sys/class/android_usb/android0/bDeviceProtocol 255
+    write /sys/class/android_usb/android0/functions dtf
+    write /sys/class/android_usb/android0/enable 1
+    setprop sys.usb.state $sys.usb.config
+# ADD For FeliCa end

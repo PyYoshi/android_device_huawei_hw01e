@@ -1,0 +1,106 @@
+#/*DTS2011121404831     z00183953    2011/12/15  Add begin */
+service hciattach /system/bin/sh /system/etc/bluetooth/init.bcm.bt.sh
+    user bluetooth
+    group bluetooth net_bt_admin system
+    disabled
+    
+service chip_power_on /system/bin/sh /system/etc/bluetooth/init.bcm.chip_on.sh
+    user root
+    group system
+    disabled
+    oneshot 
+    
+service chip_power_off /system/bin/sh /system/etc/bluetooth/init.bcm.chip_off.sh
+    user root
+    group system
+    disabled
+    oneshot
+    
+service hci_dev_up /system/bin/hci_dev_state --dev_up
+    user root
+    group bluetooth system
+    disabled 
+    oneshot
+    
+service hci_dev_down /system/bin/hci_dev_state --dev_down
+    user root
+    group bluetooth system
+    disabled 
+    oneshot    
+
+service BtWiRfServer /system/xbin/RfTest
+    user root
+    group bluetooth net_bt_admin system  
+    disabled
+    oneshot
+#/*DTS2011121404831     z00183953    2011/12/15  Add end */
+
+# /*DTS2011122005668 z00182537 2011/12/27 modify begin */
+#DTS2011121503420  h00195697  2011/12/19  Add Begin
+#service btld /system/bin/btld
+#    user bluetooth system
+#    group bluetooth net_bt_admin system
+#    disabled
+#    oneshot
+#DTS2011121503420  h00195697  2011/12/19  Add End
+# /*DTS2011122005668 z00182537 2011/12/27 modify end */
+
+
+#/*DTS2011122005668 z00182537 2011/12/27 add begin */
+# dhcp service for pan-nap/pan-u     
+service dhcpcd_brcm-pan /system/bin/dhcpcd -ABKL
+	class huawei_late_start
+	disabled
+	oneshot
+service iprenew_brcm-pan /system/bin/dhcpcd -n
+	class huawei_late_start
+	disabled
+	oneshot
+
+#DTS2012032606827     l00209058     2012/03/26 modify begin
+#DTS2012021101922 h00195697 2012/02/13 modify begin
+#service btld /system/bin/logwrapper /system/bin/btld -lpm 0 -hb 3000000 -snr 7 -hp /dev/ttyHS0
+service btld /system/bin/logwrapper /system/bin/btld -lpm 1 -hb 3000000 -snr 7 -hp /dev/ttyHS0
+    user root
+    group bluetooth net_bt_admin system
+    disabled
+    oneshot
+
+#DTS2012021101922 h00195697 2012/02/13 modify end
+#DTS2012032606827     l00209058     2012/03/26 modify end
+# start btld if soft_onoff is enabled
+on property:service.brcm.bt.soft_onoff=1
+    start btld
+
+# stop btld if soft_onoff is disabled
+on property:service.brcm.bt.soft_onoff=0
+    stop btld
+#/*DTS2011122005668 z00182537 2011/12/27 add end */
+
+#DTS2012011001728 h00195697 2012/01/11 modify begin 
+service kill_btld /system/bin/kill-btld.sh
+    user root
+    group system
+    disabled
+    oneshot
+    
+   
+service kill_hcid /system/bin/kill-bluetoothd.sh
+    user root
+    group system
+    disabled
+    oneshot
+#DTS2012011001728 h00195697 2012/01/11 modify end 
+
+#/*DTS2011122005668 z00182537 2011/12/27 modify begin */
+#STOPSHIP: Remove logwrapper and -d option before production
+service bluetoothd /system/bin/logwrapper /system/bin/bluetoothd -d -n
+    class main
+    socket bluetooth stream 660 bluetooth bluetooth
+    socket dbus_bluetooth stream 660 bluetooth bluetooth
+    # init.rc does not yet support applying capabilities, so run as root and
+    # let bluetoothd drop uid to bluetooth with the right linux capabilities
+    group bluetooth net_bt_admin misc
+    disabled
+#/*DTS2011122005668 z00182537 2011/12/27 modify end */
+
