@@ -23,7 +23,7 @@ lib/libllvm-a3xx.so
 lib/libOpenCL.so
 lib/libOpenVG.so
 lib/libsc-a2xx.so
-llib/ibsc-a3xx.so
+lib/ibsc-a3xx.so
 
 # Touch firmware
 etc/firmware/cyttsp_8960_cdp.hex
