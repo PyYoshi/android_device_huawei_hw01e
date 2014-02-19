@@ -23,7 +23,7 @@ lib/libllvm-a3xx.so
 lib/libOpenCL.so
 lib/libOpenVG.so
 lib/libsc-a2xx.so
-lib/ibsc-a3xx.so
+lib/libsc-a3xx.so
 
 # Touch firmware
 etc/firmware/cyttsp_8960_cdp.hex
@@ -42,7 +42,6 @@ bin/dtvserver
 bin/dtvsdserver
 bin/mfescand
 bin/pcuiserver
-bin/fs_encrypt_daemon
 bin/huawei_nv_bin
 bin/orientationd
 bin/geomagneticd
