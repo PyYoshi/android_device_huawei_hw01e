@@ -1,0 +1,32 @@
+#start camera server as daemon
+service qcamerasvr /system/bin/mm-qcamera-daemon
+        class late_start
+        user system
+        group system camera inet
+
+# on emmc mount the partition containing firmware
+on emmc-fs
+   mkdir /tombstones 0771 system system
+   mount ext4 /dev/block/platform/msm_sdcc.1/by-name/tombstones /tombstones nosuid nodev barrier=1
+   mkdir /tombstones/modem 0771 system system
+   mkdir /tombstones/lpass 0771 system system
+   mkdir /tombstones/wcnss 0771 system system
+   mkdir /tombstones/dsps 0771 system system
+   mkdir /firmware 0771 system system
+   wait /dev/block/platform/msm_sdcc.1/by-name/modem
+   mount vfat /dev/block/platform/msm_sdcc.1/by-name/modem /firmware ro shortname=lower
+   exec /system/bin/sh /system/etc/init.qcom.modem_links.sh
+   exec /system/bin/sh /system/etc/init.qcom.mdm_links.sh
+
+on post-fs
+   mount ext4 /dev/block/platform/msm_sdcc.1/by-name/system /system ro remount barrier=1
+
+on boot
+   write /sys/devices/i2c-3/3-0024/cyttsp_update_fw 1
+   start qcamerasvr
+
+#service thermald /system/bin/thermald
+#   class main
+#   socket sock-thermal stream 0660 system system
+#   user root
+#   group root

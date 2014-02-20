@@ -9,6 +9,9 @@ DEVICE_PACKAGE_OVERLAYS += device/huawei/hw01e/overlay
 
 $(call inherit-product, build/target/product/full.mk)
 
+# init.rc
+PRODUCT_COPY_FILES += device/huawei/hw01e/init.rc:root/init.rc
+
 # Configs - ramdisk
 PRODUCT_COPY_FILES += \
     device/huawei/hw01e/configs/init.bt.rc:root/init.bt.rc \
@@ -19,7 +22,8 @@ PRODUCT_COPY_FILES += \
     device/huawei/hw01e/configs/init.qcom.usb.rc:root/init.qcom.usb.rc \
     device/huawei/hw01e/configs/init.qcom.usb.sh:root/init.qcom.usb.sh \
     device/huawei/hw01e/configs/init.wifi.rc:root/init.wifi.rc \
-    device/huawei/hw01e/configs/ueventd.huawei.rc:root/ueventd.huawei.rc
+    device/huawei/hw01e/configs/ueventd.huawei.rc:root/ueventd.huawei.rc \
+    device/huawei/hw01e/configs/init.target.rc:root/init.target.rc
 
 # fingerprint
 PRODUCT_BUILD_PROP_OVERRIDES += PRODUCT_NAME=HW-01E BUILD_FINGERPRINT=Huawei/HW-01E/hwu9501L:4.0.4/HuaweiU9501L/C341B148:user/ota-rel-keys,release-keys PRIVATE_BUILD_DESC="U9501L-user"
