@@ -9,9 +9,6 @@ DEVICE_PACKAGE_OVERLAYS += device/huawei/hw01e/overlay
 
 $(call inherit-product, build/target/product/full.mk)
 
-# init.rc
-PRODUCT_COPY_FILES += device/huawei/hw01e/init.rc:root/init.rc
-
 # Configs - ramdisk
 PRODUCT_COPY_FILES += \
     device/huawei/hw01e/configs/init.bt.rc:root/init.bt.rc \
