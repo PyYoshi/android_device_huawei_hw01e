@@ -7,6 +7,7 @@
 /dev/block/mmcblk0p19   /recovery   emmc    defaults    defaults
 
 /dev/block/mmcblk1p1    /external_sd    vfat    defaults    voldmanaged=sdcard:auto,check
+#/devices/platform/msm_sdcc.3/mmc_host/mmc1	/external_sd	vfat	defaults	voldmanaged=sdcard:auto
 
 #/dev/block/mmcblk0p21   /cust   ext4   defaults    defaults
 #/dev/block/mmcblk0p18   /misc   emmc   defaults    defaults

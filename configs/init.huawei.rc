@@ -1,30 +1,3 @@
-# Copyright (c) 2009-2012, Code Aurora Forum. All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions are met:
-#     * Redistributions of source code must retain the above copyright
-#       notice, this list of conditions and the following disclaimer.
-#     * Redistributions in binary form must reproduce the above copyright
-#       notice, this list of conditions and the following disclaimer in the
-#       documentation and/or other materials provided with the distribution.
-#     * Neither the name of Code Aurora nor
-#       the names of its contributors may be used to endorse or promote
-#       products derived from this software without specific prior written
-#       permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-# IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-# NON-INFRINGEMENT ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
-# CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-# EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-# PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
-# OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
-# OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
-# ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#
-
 import init.qcom.usb.rc
 import init.wifi.rc
 
@@ -126,18 +99,6 @@ on boot
     # an ack packet comes out of order
     write /proc/sys/net/netfilter/nf_conntrack_tcp_be_liberal 1
 
-# import cne init file
-    #For FeliCa
-    insmod /system/lib/modules/felica_gpio.ko
-    insmod /system/lib/modules/felica_uart.ko
-    insmod /system/lib/modules/felica_rws.ko
-
-    #For USBD
-    insmod /system/lib/modules/dtfum.ko
-    insmod /system/lib/modules/dtfup.ko
-    insmod /system/lib/modules/dtfig.ko
-    insmod /system/lib/modules/dtfiu.ko
-
 on post-fs
     export_rc /persist/init.cne.rc
 
@@ -198,7 +159,6 @@ on post-fs-data
     chmod 2770 /data/bluetooth
     
     #Create directory for FeliCa Lock
-    mkdir /data/finfo/ 0770 flock flock
 
     setprop vold.post_fs_data_done 1
 
@@ -241,27 +201,6 @@ service rmt_storage /system/bin/rmt_storage
 on property:ro.emmc=1
     start rmt_storage
 
-service hciattach /system/bin/sh /system/etc/init.qcom.bt.sh
-    class late_start
-    user bluetooth
-    group qcom_oncrpc bluetooth net_bt_admin
-    disabled
-    oneshot
-
-# service bt-dun /system/bin/dun-server /dev/smd7 /dev/rfcomm0
-   # class late_start
-   # user bluetooth
-   # group bluetooth net_bt_admin inet
-   # disabled
-   # oneshot
-
-# service bt-sap /system/bin/sapd 15
-   # user bluetooth
-   # group bluetooth net_bt_admin
-   # class late_start
-   # disabled
-   # oneshot
-
 service bridgemgrd /system/bin/bridgemgrd
     class late_start
     user radio
@@ -273,10 +212,6 @@ service port-bridge /system/bin/port-bridge /dev/smd0 /dev/ttyGS0
     user system
     group system inet
     disabled
-
-# on property:ro.baseband="msm"
-    # Enable BT-DUN only for all msms
-    # setprop ro.qualcomm.bluetooth.dun true
 
 service qmiproxy /system/bin/qmiproxy
     class main
@@ -387,24 +322,14 @@ service qcom-post-boot /system/bin/sh /system/etc/init.qcom.post_boot.sh
 on property:sys.boot_completed=1
     start qcom-post-boot
 
-service atfwd /system/bin/ATFWD-daemon
-    class late_start
-    user system
-    group system radio
-#onrestart exec /system/bin/log -t RIL-ATFWD -p w "ATFWD daemon restarted"
-
-service hdmid /system/bin/hdmid
-    class late_start
-    socket hdmid stream 0660 root system graphics
-    disabled
-
 service ppd /system/bin/mm-pp-daemon
     class late_start
     user system
     socket pps stream 0660 system system graphics
     group system graphics
 
-service hostapd /system/bin/hostapd -dddd /data/hostapd/hostapd.conf
+#service hostapd /system/bin/hostapd -dddd /data/hostapd/hostapd.conf
+service hostapd /system/bin/hostapd -dddd /data/misc/wifi/hostapd.conf
     class late_start
     user root
     group root
@@ -419,12 +344,6 @@ service ds_fmc_appd /system/bin/ds_fmc_appd -p "rmnet0" -D
 
 on property:persist.data.ds_fmc_app.mode=1
     start ds_fmc_appd
-
-service ims_regmanager /system/bin/exe-ims-regmanagerprocessnative
-    class late_start
-    user system
-    group qcom_oncrpc net_bt_admin inet radio wifi
-    disabled
 
 # rillogcat is triggered by projectmenu or setprop
 service rillogcat /system/bin/logcat -b radio -v time -r 4096 -n 32 -f /data/android_logs/rillogcat-log
@@ -482,9 +401,6 @@ service thermalcat /system/bin/thermalcat -t 10 -p /sdcard/android_logs/thermalo
     oneshot
     disabled
 
-on property:persist.ims.regmanager.mode=1
-    start ims_regmanager
-
 on property:ro.data.large_tcp_window_size=true
     # Adjust socket buffer to enlarge TCP receive window for high bandwidth (e.g. DO-RevB)
     write /proc/sys/net/ipv4/tcp_adv_win_scale  1
@@ -513,7 +429,7 @@ service profiler_daemon /system/bin/profiler_daemon
     group root
     disabled
 
-service sdcard /system/bin/sdcard /data/media 1023 1023
+service sdcard /system/bin/sdcard /data/share 1023 1023
     class late_start
     disabled
 
@@ -526,80 +442,10 @@ service hcidump /system/bin/sh /system/etc/hcidump.sh
     disabled
     oneshot
 
-service felicamdl /system/bin/felicadtmdl
-    class late_start
-    user felicaDT
-    group felicaDT
-    oneshot
-
-#action in debug mode, in release image,these actions will be never execute
-#DTS2012070400227 w00173980 2012/07/26 begin add log config prop
 on property:persist.sys.shlog.switch=TRUE
-#DTS2012070400227 w00173980 2012/07/26 end
     start rillogcat
     start applogcat
     start kmsglogcat
 
 on property:persist.sys.sysrq=*
     write /proc/sys/kernel/sysrq   $persist.sys.sysrq
-
-
-
-
-
-
-
-
-service akm8963 /system/bin/akmd8963
-	disabled
-    oneshot
-
-service akm8975 /system/bin/akmd8975
-    disabled
-    oneshot
-
-service rmt_oeminfo /system/bin/rmt_oeminfo
-    class huawei
-
-service libqmi_oem_main /system/bin/libqmi_oem_main
-    class late_start
-
-service test_diag /system/bin/test_diag
-    class huawei
-
-service ftmdaemon /system/bin/ftmdaemon
-    class huawei
-
-service huawei_version /system/bin/huawei_version
-    class huawei
-    oneshot
-
-service dtvserver /system/bin/dtvserver
-    class main
-
-service dtvsdserver /system/bin/dtvsdserver
-    class main
-
-service mfescand /system/bin/mfescand
-    class main
-    socket mfescand stream 600 system system
-
-service pcuiserver /system/bin/pcuiserver
-    class huawei
-    oneshot
-
-service fs_encrypt /system/bin/fs_encrypt_daemon
-    user root
-    disabled
-
-service huawei_nv_bin /system/bin/huawei_nv_bin
-    disabled
-    oneshot
-
-service yamaha_ori /system/bin/orientationd
-	disabled
-    oneshot
-
-service yamaha_geo /system/bin/geomagneticd
-	disabled
-    oneshot
