@@ -9,6 +9,9 @@ DEVICE_PACKAGE_OVERLAYS += device/huawei/hw01e/overlay
 
 $(call inherit-product, build/target/product/full.mk)
 
+# Adreno
+$(call inherit-product, device/huawei/hw01e/device_adreno.mk)
+
 # Configs - ramdisk
 PRODUCT_COPY_FILES += \
     device/huawei/hw01e/configs/init.bt.rc:root/init.bt.rc \
