@@ -45,11 +45,9 @@ bin/pcuiserver
 bin/huawei_nv_bin
 bin/orientationd
 bin/geomagneticd
-
-
-
-
-
-
-
-
+bin/MmbCaCasDrmMw
+bin/MmbFcCtlMw
+bin/MmbStCtlMwService
+bin/MmbFcMp4MwServer
+bin/MmbFcLiceMwServer
+vendor/bin/init_devadmin.sh
