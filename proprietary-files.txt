@@ -32,6 +32,45 @@ etc/firmware/cyttsp_8960_cdp.hex
 bin/akmd8963
 bin/akmd8975
 
+# hw libs
+lib/hw/camera.msm8960.so
+lib/hw/lights.msm8960.so
+lib/hw/sensors.default.so
+lib/hw/gps.default.so
+
+# firmware
+etc/batt_fw.bin
+vendor/firmware/fw_bcmdhd.bin
+vendor/firmware/fw_bcmdhd_apsta.bin
+vendor/firmware/fw_bcmdhd_p2p.bin
+vendor/firmware/fw_bcmdhd_test.bin
+vendor/firmware/nvram.txt
+vendor/firmware/nvram_C8868L_VA.txt
+vendor/firmware/nvram_C8868L_VB.txt
+vendor/firmware/nvram_C8869L_VA.txt
+vendor/firmware/nvram_U9201L_VA.txt
+vendor/firmware/nvram_U9201L_VB.txt
+vendor/firmware/nvram_U9201L_VC.txt
+vendor/firmware/nvram_U9501L_VA.txt
+vendor/firmware/nvram_U9501L_VB.txt
+vendor/firmware/nvram_U9501L_VC.txt
+vendor/firmware/nvram_U9501L_VD.txt
+vendor/firmware/nvram_U9501L_VE.txt
+
+# radio
+lib/libril-qc-qmi-1.so
+lib/libdsutils.so
+lib/libril-qcril-hook-oem.so
+lib/libqmi.so
+lib/libdiag.so
+lib/libqmiservices.so
+lib/libidl.so
+lib/libdsi_netctrl.so
+lib/libqdp.so
+lib/libdsprofile.so
+lib/libnetmgr.so
+lib/libqdi.so
+
 # Other
 bin/rmt_oeminfo
 bin/libqmi_oem_main
