@@ -113,6 +113,8 @@ TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/platform/msm_hsusb/gadget/lun%d/
 # recovery: /dev/block/platform/msm_sdcc.1/by-name/recovery -> /dev/block/mmcblk0p19
 # system: /dev/block/platform/msm_sdcc.1/by-name/system -> /dev/block/mmcblk0p14
 # userdata: /dev/block/platform/msm_sdcc.1/by-name/userdata -> /dev/block/mmcblk0p26
+# WARNING:/<cyanogenmod>/bootable/recovery/res/images 以下を "optipng -o7 *.png"してサイズを減らす必要がある。
+# TODO: そのうちkernelで使ってないものをdisabledする作業をしないとなー
 BOARD_BOOTIMAGE_PARTITION_SIZE := 8388608
 BOARD_RECOVERYIMAGE_PARTITION_SIZE := 8388608
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 805306368
