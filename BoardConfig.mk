@@ -10,7 +10,7 @@ TARGET_KERNEL_CUSTOM_TOOLCHAIN_SUFFIX := arm-eabi-
 TARGET_SPECIFIC_HEADER_PATH := device/huawei/hw01e/include
 
 # allow device
-TARGET_OTA_ASSERT_DEVICE := hw01e
+TARGET_OTA_ASSERT_DEVICE := hw01e,U9501L,hwu9501L
 
 # Vendor
 BOARD_VENDOR := huawei
