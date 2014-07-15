@@ -51,7 +51,8 @@ BOARD_KERNEL_PAGESIZE := 2048
 # x = 0x1400000
 BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x1400000
 TARGET_KERNEL_SOURCE := kernel/huawei/hw01e
-TARGET_KERNEL_CONFIG := hw01e_defconfig
+TARGET_KERNEL_CONFIG := hw01e_ninjakernel_defconfig
+#hw01e_defconfig
 
 # Recovery
 BOARD_HAS_NO_SELECT_BUTTON := true
@@ -77,11 +78,11 @@ TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
 #TARGET_RECOVERY_INITRC := device/huawei/hw01e/configs/init.rc
 
 # Audio
-#BOARD_USES_ALSA_AUDIO := true
-#TARGET_USES_QCOM_COMPRESSED_AUDIO := true
+BOARD_USES_ALSA_AUDIO := true
+TARGET_USES_QCOM_COMPRESSED_AUDIO := true
 
 # Bluetooth
-#BOARD_HAVE_BLUETOOTH := true
+BOARD_HAVE_BLUETOOTH := true
 
 # Camera
 #USE_CAMERA_STUB := true
